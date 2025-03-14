@@ -1,0 +1,38 @@
+import { Observable, Observer, Subject } from "rxjs";
+
+
+const observer: Observer<any> = {
+    next: value => console.log('next:', value),
+    error: error => console.warn('error:', error),
+    complete: () => console.info('completado')
+}
+
+const intervalo$ = new Observable<number>(subs => {
+    const IntervalId = setInterval(() => {
+        subs.next(Math.random());
+    }
+        , 1000);
+
+    return () => {
+        clearInterval(IntervalId);
+        console.log('Intervalo destruido');
+    }
+
+});
+
+const subject$ = new Subject();
+
+const intervalSub = intervalo$.subscribe(subject$);//susbjet es un observer
+
+const subs = subject$.subscribe(observer);
+const subs1 = subject$.subscribe(observer);
+
+
+setTimeout(() => {
+    subject$.next(10);
+    subject$.complete();
+    intervalSub.unsubscribe();
+
+}, 3500);
+
+
