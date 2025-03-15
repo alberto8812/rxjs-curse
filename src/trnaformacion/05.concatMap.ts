@@ -1,4 +1,4 @@
-import { concatMap, exhaustMap, from, fromEvent, interval, switchMap, take } from "rxjs";
+import { concatMap, from, fromEvent, interval, switchMap, take } from "rxjs";
 
 
 const interval$ = interval(1000).pipe(take(3));
@@ -7,7 +7,7 @@ const click$ = fromEvent(document, 'click');
 
 click$
     .pipe(
-        exhaustMap(() => interval$)
+        concatMap(() => interval$)
     )
     .subscribe(
         {
